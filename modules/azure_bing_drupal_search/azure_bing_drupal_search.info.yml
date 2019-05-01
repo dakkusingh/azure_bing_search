@@ -1,0 +1,7 @@
+name: 'Azure Bing Drupal Search'
+description: 'Integrates Azure Bing Search with Drupal'
+type: module
+core: 8.x
+package: Azure Cognitive Services
+dependencies:
+  - azure_bing_search:azure_bing_search

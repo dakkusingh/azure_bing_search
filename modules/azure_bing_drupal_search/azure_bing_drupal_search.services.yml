@@ -1,0 +1,5 @@
+services:
+  azure_bing_drupal_search.route_subscriber:
+    class: Drupal\azure_bing_drupal_search\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
