@@ -1,0 +1,4 @@
+services:
+  azure_bing_search.bingcustomsearch:
+    class: Drupal\azure_bing_search\Service\BingCustomSearch
+    arguments: ["@config.factory", "@language_manager", "@http_client_factory", "@logger.factory"]
