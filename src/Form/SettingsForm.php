@@ -53,7 +53,7 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Custom Configuration ID'),
       '#type' => 'textfield',
       '#required' => TRUE,
-      '#default_value' => $query['custom_config_id'],
+      '#default_value' => $query['customConfig'],
     ];
 
     $form['count'] = [
@@ -74,14 +74,14 @@ class SettingsForm extends ConfigFormBase {
         'Strict' => $this->t('Strict'),
       ],
       '#description' => $this->t('A filter used to filter webpages for adult content.'),
-      '#default_value' => $query['safesearch'],
+      '#default_value' => $query['safeSearch'],
     ];
 
     $form['text_decorations'] = [
       '#title' => $this->t('Use text decorations'),
       '#type' => 'checkbox',
       '#description' => $this->t('Whether display strings should contain decoration markers such as hit highlighting characters.'),
-      '#default_value' => $query['text_decorations'],
+      '#default_value' => $query['textDecorations'],
     ];
 
     $form['text_format'] = [
@@ -92,7 +92,7 @@ class SettingsForm extends ConfigFormBase {
         'HTML' => $this->t('HTML'),
       ],
       '#description' => $this->t('Use Unicode characters or HTML tags to mark content that needs special formatting.'),
-      '#default_value' => $query['text_format'],
+      '#default_value' => $query['textFormat'],
     ];
 
     return parent::buildForm($form, $form_state);
@@ -103,11 +103,11 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->configFactory()->getEditable('azure_bing_search.settings')
-      ->set('api_operations.bingcustomsearch.query.custom_config_id', $form_state->getValue('custom_config_id'))
+      ->set('api_operations.bingcustomsearch.query.customConfig', $form_state->getValue('custom_config_id'))
       ->set('api_operations.bingcustomsearch.query.count', $form_state->getValue('count'))
-      ->set('api_operations.bingcustomsearch.query.safesearch', $form_state->getValue('safesearch'))
-      ->set('api_operations.bingcustomsearch.query.text_decorations', $form_state->getValue('text_decorations'))
-      ->set('api_operations.bingcustomsearch.query.text_format', $form_state->getValue('text_format'))
+      ->set('api_operations.bingcustomsearch.query.safeSearch', $form_state->getValue('safesearch'))
+      ->set('api_operations.bingcustomsearch.query.textDecorations', $form_state->getValue('text_decorations'))
+      ->set('api_operations.bingcustomsearch.query.textFormat', $form_state->getValue('text_format'))
       ->set('api_operations.bingcustomsearch.headers.Ocp-Apim-Subscription-Key', $form_state->getValue('subscription_key'))
       ->save();
 

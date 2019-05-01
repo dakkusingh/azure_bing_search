@@ -188,11 +188,14 @@ class AzureBingDrupalSearch extends ConfigurableSearchPluginBase implements Acce
 
     // Reconcile items per page with API max 50.
     $n = $page_size < self::MAX_NUM ? $page_size : self::MAX_NUM;
+
     for ($i = 0; $i < $page_size; $i += self::MAX_NUM) {
       $offset = $page * $page_size + $i;
+
       if (!$response = $this->getResults($n, $offset)) {
         break;
       }
+
       if (isset($response['webPages']['value'])) {
         $this->count = $response['webPages']['totalEstimatedMatches'];
         $items = array_merge($items, $response['webPages']['value']);
@@ -200,6 +203,7 @@ class AzureBingDrupalSearch extends ConfigurableSearchPluginBase implements Acce
       else {
         break;
       }
+
     }
 
     return $items;

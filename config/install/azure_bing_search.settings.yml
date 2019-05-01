@@ -4,12 +4,12 @@ api_operations:
     base_uri: 'https://api.cognitive.microsoft.com/bingcustomsearch/v7.0/'
     uri: 'search'
     query:
-      safesearch: 'Off'
-      text_decorations: FALSE
-      text_format: 'HTML'
+      safeSearch: 'Off'
+      textDecorations: FALSE
+      textFormat: 'HTML'
       offset: 0
       count: 10
-      custom_config_id: NULL
+      customConfig: NULL
     headers:
       Content-Type: 'application/json'
       Ocp-Apim-Subscription-Key: ''
