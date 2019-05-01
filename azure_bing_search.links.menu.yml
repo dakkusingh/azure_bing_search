@@ -1,0 +1,5 @@
+azure_bing_search.settings:
+  title: 'Azure Bing Search'
+  description: 'Manage settings for Azure Bing Custom Search API.'
+  parent: system.admin_config_search
+  route_name: azure_bing_search.settings

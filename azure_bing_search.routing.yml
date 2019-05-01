@@ -1,0 +1,9 @@
+azure_bing_search.settings:
+  path: '/admin/config/search/azure_bing_search/settings'
+  defaults:
+    _form: '\Drupal\azure_bing_search\Form\SettingsForm'
+    _title: 'Azure Bing Search'
+  requirements:
+    _permission: 'administer site configuration'
+  options:
+    _admin_route: TRUE
