@@ -1,5 +1,5 @@
-name: 'Azure Bing Search'
-description: 'Integrates Azure Bing Search API with Drupal'
+name: 'Azure Bing Search API'
+description: 'Integrates Azure Bing Search API with Drupal and provide a convienent service.'
 type: module
 core: 8.x
 package: Azure Cognitive Services
