@@ -108,10 +108,9 @@ class BingCustomSearch {
 
     // Make sure all the keys are set before attempting a search.
     if (isset($options['headers']['Ocp-Apim-Subscription-Key']) &&
-      isset($options['query']['custom_config_id']) &&
+      isset($options['query']['customConfig']) &&
       !empty($options['headers']['Ocp-Apim-Subscription-Key']) &&
-      !empty($options['query']['custom_config_id'])) {
-
+      !empty($options['query']['customConfig'])) {
       try {
         $client = $this->httpClientFactory->fromOptions($options);
         $response = $client->request($options['http_method'], $options['uri']);
@@ -139,7 +138,7 @@ class BingCustomSearch {
 
     $dynamicOptions = [
       // Unique identifier that identifies your custom search instance.
-      'textDecorations' => $query['text_decorations'] ? 'true' : 'false',
+      'textDecorations' => $query['textDecorations'] ? 'true' : 'false',
 
       // The market where the results come from.
       // TODO Not yet implemented.
