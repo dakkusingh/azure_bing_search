@@ -8,6 +8,8 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
 /**
  * Simple filter to handle filtering Azure Bing results by query.
  *
+ * @ingroup views_filter_handlers
+ *
  * @ViewsFilter("azure_bing_search_views_query")
  */
 class AzureBingSearchQuery extends FilterPluginBase {
@@ -17,24 +19,13 @@ class AzureBingSearchQuery extends FilterPluginBase {
    *
    * @var bool
    */
-//  protected $alwaysMultiple = FALSE;
+  protected $alwaysMultiple = FALSE;
 
   /**
    * @var bool
    * Disable the possibility to use operators.
    */
   public $no_operator = FALSE;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function adminSummary() {
-    $summary = parent::adminSummary();
-    if (!empty($this->options['exposed'])) {
-      $summary = $this->t('exposed');
-    }
-    return $summary;
-  }
 
   /**
    * {@inheritdoc}

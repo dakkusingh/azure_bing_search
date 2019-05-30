@@ -124,7 +124,6 @@ class AzureBingSearchViews extends QueryPluginBase {
   public function execute(ViewExecutable $view) {
     $view->result = [];
     $view->total_rows = 0;
-    $view->execute_time = 0;
 
     $results = $this->findResults($view->pager->getCurrentPage());
 
@@ -147,7 +146,7 @@ class AzureBingSearchViews extends QueryPluginBase {
           $row['index'] = $index++;
           $view->result[] = new ResultRow($row);
         }
-        
+
       }
     }
   }
@@ -211,7 +210,7 @@ class AzureBingSearchViews extends QueryPluginBase {
     $query = $this->view->build_info['query'];
 
     // TODO find a better way.
-    $keyword = $query['keys'][0];
+    $keyword = $query['keyword'][0];
 
     return $this->bingCustomSearch->searchResults($keyword, $params);
   }
@@ -258,7 +257,6 @@ class AzureBingSearchViews extends QueryPluginBase {
     ];
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -303,17 +301,6 @@ class AzureBingSearchViews extends QueryPluginBase {
 //      '#default_value' => $this->options['safeSearch'],
 //    ];
   }
-
-
-
-
-
-
-
-
-
-
-
 
   /**
    * The following methods replicate the interface of Views' default SQL query
