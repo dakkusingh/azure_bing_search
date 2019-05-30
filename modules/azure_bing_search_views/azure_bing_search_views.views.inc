@@ -18,6 +18,7 @@ function azure_bing_search_views_views_data() {
   // Fields.
   // See https://docs.microsoft.com/en-us/rest/api/cognitiveservices-bingsearch/bing-custom-search-api-v7-reference#webpage
 
+  // Webpage Name field.
   $data['azure_bing_search']['name'] = [
     'title' => t('Webpage Name'),
     'help' => t('Use this name along with url to create a hyperlink that when clicked takes the user to the webpage.'),
@@ -27,6 +28,7 @@ function azure_bing_search_views_views_data() {
     ],
   ];
 
+  // URL field.
   $data['azure_bing_search']['url'] = [
     'title' => t('URL'),
     'help' => t('Use this URL along with name to create a hyperlink that when clicked takes the user to the webpage.'),
@@ -36,6 +38,7 @@ function azure_bing_search_views_views_data() {
     ],
   ];
 
+  // Snippet field.
   $data['azure_bing_search']['snippet'] = [
     'title' => t('Snippet'),
     'help' => t('A snippet of text from the webpage that describes its contents.'),
@@ -45,18 +48,12 @@ function azure_bing_search_views_views_data() {
     ],
   ];
 
-  $data['azure_bing_search']['keys'] = [
+  // Keyword field.
+  $data['azure_bing_search']['keyword'] = [
     'title' => t('Search Keywords'),
-    'help' => t('The keywords to search for.'),
+    'help' => t('The keywords to search for'),
     'filter' => [
       'id' => 'azure_bing_search_views_query',
-      'no group by' => TRUE,
-      'search_type' => 'azure_bing_search_views',
-    ],
-    'argument' => [
-      'id' => 'search',
-      'no group by' => TRUE,
-      'search_type' => 'azure_bing_search_views',
     ],
   ];
 
