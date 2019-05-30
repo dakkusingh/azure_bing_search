@@ -105,7 +105,7 @@ class AzureBingSearchViews extends QueryPluginBase {
     // as group operators. This does not apply to us, as the Bing Search API
     // has no such concept, nor do we support this concept for filtering.
     if (isset($this->where)) {
-      foreach ($this->where as $where_group => $where) {
+      foreach ($this->where as $where) {
         foreach ($where['conditions'] as $condition) {
           // Remove dot from beginning of the string.
           $field_name = ltrim($condition['field'], '.');
