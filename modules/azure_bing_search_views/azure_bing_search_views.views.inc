@@ -45,5 +45,20 @@ function azure_bing_search_views_views_data() {
     ],
   ];
 
+  $data['azure_bing_search']['keys'] = [
+    'title' => t('Search Keywords'),
+    'help' => t('The keywords to search for.'),
+    'filter' => [
+      'id' => 'azure_bing_search_views_query',
+      'no group by' => TRUE,
+      'search_type' => 'azure_bing_search_views',
+    ],
+    'argument' => [
+      'id' => 'search',
+      'no group by' => TRUE,
+      'search_type' => 'azure_bing_search_views',
+    ],
+  ];
+
   return $data;
 }

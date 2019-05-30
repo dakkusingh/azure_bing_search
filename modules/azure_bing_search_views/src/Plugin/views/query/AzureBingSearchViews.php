@@ -2,6 +2,7 @@
 namespace Drupal\azure_bing_search_views\Plugin\views\query;
 
 use Drupal\azure_bing_search\Service\BingCustomSearch;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ResultRow;
 use Drupal\views\ViewExecutable;
@@ -25,6 +26,14 @@ class AzureBingSearchViews extends QueryPluginBase {
    * @var \Drupal\azure_bing_search\Service\BingCustomSearch
    */
   private $bingCustomSearch;
+
+  /**
+   * Collection of filter criteria.
+   *
+   * @var array
+   */
+  protected $where;
+
 
   /**
    * AzureBingSearchViews constructor.
@@ -64,38 +73,185 @@ class AzureBingSearchViews extends QueryPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function execute(ViewExecutable $view) {
-  // TODO
-  $params = [
-    'offset' => 0,
-    'count' => 10,
-  ];
+  public function build(ViewExecutable $view) {
+    // Mostly modeled off of \Drupal\views\Plugin\views\query\Sql::build()
 
-  $response = $this->bingCustomSearch->searchResults('post', $params);
-  if (isset($response['webPages']['value'])) {
-    $results = $response['webPages']['value'];
+    // Store the view in the object to be able to use it later.
+    $this->view = $view;
 
-    //  ksm($results);
-    //  ksm($response);
-    $index = 0;
+    $view->initPager();
 
-    foreach ($results as $item) {
-      $row = [];
-      $row['name'] = $item['name'];
-      $row['url'] = $item['url'];
-      $row['snippet'] = $item['snippet'];
+    // Let the pager modify the query to add limits.
+    $view->pager->query();
 
-      // If we got some data back from the API for this keyword,
-      // add defaults and expose as a row to views.
-      if (!empty($row)) {
-        $row['index'] = $index++;
-        $view->result[] = new ResultRow($row);
-      }
-    }
+    $view->build_info['query'] = $this->query();
+    $view->build_info['count_query'] = $this->query(TRUE);
+//    $view->pager->getItemsPerPage();
+//    ksm($view->pager->getCurrentPage());
   }
 
-}
+  /**
+   * {@inheritdoc}
+   */
+  public function query($get_count = FALSE) {
+    // Fill up the $query array with properties that we will use in forming the
+    // API request.
+    $query = [];
 
+    // Iterate over $this->where to gather up the filtering conditions to pass
+    // along to the API. Note that views allows grouping of conditions, as well
+    // as group operators. This does not apply to us, as the Bing Search API
+    // has no such concept, nor do we support this concept for filtering.
+    if (isset($this->where)) {
+      foreach ($this->where as $where_group => $where) {
+        foreach ($where['conditions'] as $condition) {
+          // Remove dot from beginning of the string.
+          $field_name = ltrim($condition['field'], '.');
+          $query[$field_name] = $condition['value'];
+        }
+      }
+    }
+
+    return $query;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function execute(ViewExecutable $view) {
+    // Grab data regarding conditions placed on the query.
+    $query = $view->build_info['query'];
+    // TODO find a better way.
+    $keyword = $query['keys'][0];
+
+    $view->result = [];
+    $view->total_rows = 0;
+    $view->execute_time = 0;
+
+    // TODO
+    $params = [
+      'offset' => 0,
+      'count' => $view->getItemsPerPage(),
+    ];
+
+    $response = $this->bingCustomSearch->searchResults($keyword, $params);
+
+    if (isset($response['webPages']['value'])) {
+      $results = $response['webPages']['value'];
+      $view->pager->total_items = $view->total_rows = $response['webPages']['totalEstimatedMatches'];
+      $view->pager->updatePageInfo();
+
+//        ksm($results);
+//        ksm($view);
+//        ksm($response);
+      $index = 0;
+
+      foreach ($results as $item) {
+        $row = [];
+        $row['name'] = $item['name'];
+        $row['url'] = $item['url'];
+        $row['snippet'] = $item['snippet'];
+
+        // If we got some data back from the API for this keyword,
+        // add defaults and expose as a row to views.
+        if (!empty($row)) {
+          $row['index'] = $index++;
+          $view->result[] = new ResultRow($row);
+        }
+      }
+
+    }
+
+  }
+
+
+  /**
+   * Adds a simple condition to the query. Collect data on the configured filter
+   * criteria so that we can appropriately apply it in the query() and execute()
+   * methods.
+   *
+   * @param $group
+   *   The WHERE group to add these to; groups are used to create AND/OR
+   *   sections. Groups cannot be nested. Use 0 as the default group.
+   *   If the group does not yet exist it will be created as an AND group.
+   * @param $field
+   *   The name of the field to check.
+   * @param $value
+   *   The value to test the field against. In most cases, this is a scalar. For more
+   *   complex options, it is an array. The meaning of each element in the array is
+   *   dependent on the $operator.
+   * @param $operator
+   *   The comparison operator, such as =, <, or >=. It also accepts more
+   *   complex options such as IN, LIKE, LIKE BINARY, or BETWEEN. Defaults to =.
+   *   If $field is a string you have to use 'formula' here.
+   *
+   * @see \Drupal\Core\Database\Query\ConditionInterface::condition()
+   * @see \Drupal\Core\Database\Query\Condition
+   */
+  public function addWhere($group, $field, $value = NULL, $operator = NULL) {
+    // Ensure all variants of 0 are actually 0. Thus '', 0 and NULL are all
+    // the default group.
+    if (empty($group)) {
+      $group = 0;
+    }
+
+    // Check for a group.
+    if (!isset($this->where[$group])) {
+      $this->setWhereGroup('AND', $group);
+    }
+
+    $this->where[$group]['conditions'][] = [
+      'field' => $field,
+      'value' => $value,
+      'operator' => $operator,
+    ];
+  }
+
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function defineOptions() {
+    $options = parent::defineOptions();
+    $options['safeSearch'] = [
+      'default' => 'Off',
+    ];
+
+    return $options;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+    parent::buildOptionsForm($form, $form_state);
+
+    // See https://docs.microsoft.com/en-us/rest/api/cognitiveservices-bingsearch/bing-custom-search-api-v7-reference#query-parameters
+    $form['safeSearch'] = [
+      '#title' => $this->t('Safe Search'),
+      '#type' => 'select',
+      '#options' => [
+        'Off' => t('Off'),
+        'Moderate' => t('Moderate'),
+        'Strict' => t('Strict'),
+      ],
+      '#description' => $this->t('A filter used to filter webpages for adult content.'),
+      '#default_value' => $this->options['safeSearch'],
+    ];
+
+    // See https://docs.microsoft.com/en-us/rest/api/cognitiveservices-bingsearch/bing-custom-search-api-v7-reference#query-parameters
+//    $form['safeSearch'] = [
+//      '#title' => $this->t('Safe Search'),
+//      '#type' => 'select',
+//      '#options' => [
+//        'Off' => t('Off'),
+//        'Moderate' => t('Moderate'),
+//        'Strict' => t('Strict'),
+//      ],
+//      '#description' => $this->t('A filter used to filter webpages for adult content.'),
+//      '#default_value' => $this->options['safeSearch'],
+//    ];
+  }
 
 
 
