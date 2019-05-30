@@ -10,9 +10,9 @@ use Drupal\views\Plugin\views\filter\FilterPluginBase;
  *
  * @ingroup views_filter_handlers
  *
- * @ViewsFilter("azure_bing_search_views_query")
+ * @ViewsFilter("azure_bing_search_views_keyword")
  */
-class AzureBingSearchQuery extends FilterPluginBase {
+class AzureBingSearchViewsKeyword extends FilterPluginBase {
 
   /**
    * This filter is always considered multiple-valued.

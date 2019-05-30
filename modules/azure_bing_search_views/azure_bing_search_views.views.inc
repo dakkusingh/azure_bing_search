@@ -53,7 +53,7 @@ function azure_bing_search_views_views_data() {
     'title' => t('Search Keywords'),
     'help' => t('The keywords to search for'),
     'filter' => [
-      'id' => 'azure_bing_search_views_query',
+      'id' => 'azure_bing_search_views_keyword',
     ],
   ];
 
