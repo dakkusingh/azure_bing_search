@@ -34,6 +34,11 @@ class AzureBingSearchViews extends QueryPluginBase {
    */
   protected $where;
 
+  /**
+   * Max number of items (`count`) via API.
+   */
+  const MAX_NUM = 50;
+
 
   /**
    * AzureBingSearchViews constructor.
@@ -84,10 +89,8 @@ class AzureBingSearchViews extends QueryPluginBase {
     // Let the pager modify the query to add limits.
     $view->pager->query();
 
+    // Export parameters for preview.
     $view->build_info['query'] = $this->query();
-    $view->build_info['count_query'] = $this->query(TRUE);
-//    $view->pager->getItemsPerPage();
-//    ksm($view->pager->getCurrentPage());
   }
 
   /**
@@ -119,34 +122,20 @@ class AzureBingSearchViews extends QueryPluginBase {
    * {@inheritdoc}
    */
   public function execute(ViewExecutable $view) {
-    // Grab data regarding conditions placed on the query.
-    $query = $view->build_info['query'];
-    // TODO find a better way.
-    $keyword = $query['keys'][0];
-
     $view->result = [];
     $view->total_rows = 0;
     $view->execute_time = 0;
 
-    // TODO
-    $params = [
-      'offset' => 0,
-      'count' => $view->getItemsPerPage(),
-    ];
+    $results = $this->findResults($view->pager->getCurrentPage());
 
-    $response = $this->bingCustomSearch->searchResults($keyword, $params);
-
-    if (isset($response['webPages']['value'])) {
-      $results = $response['webPages']['value'];
-      $view->pager->total_items = $view->total_rows = $response['webPages']['totalEstimatedMatches'];
+    if ($results['count'] != 0) {
+      // Store the results.
+      $view->pager->total_items = $view->total_rows = $results['count'];
       $view->pager->updatePageInfo();
 
-//        ksm($results);
-//        ksm($view);
-//        ksm($response);
       $index = 0;
 
-      foreach ($results as $item) {
+      foreach ($results['items'] as $item) {
         $row = [];
         $row['name'] = $item['name'];
         $row['url'] = $item['url'];
@@ -158,12 +147,74 @@ class AzureBingSearchViews extends QueryPluginBase {
           $row['index'] = $index++;
           $view->result[] = new ResultRow($row);
         }
+        
       }
-
     }
-
   }
 
+  /**
+   * Queries to find search results, and sets status messages.
+   *
+   * This method can assume that $this->isSearchExecutable() has already been
+   * checked and returned TRUE.
+   *
+   * @return array|null
+   *   Results from search query execute() method, or NULL if the search
+   *   failed.
+   */
+  protected function findResults($page) {
+    $results['count'] = 0;
+    $results['items'] = 0;
+
+    $page_size = $this->view->getItemsPerPage();
+
+    // Reconcile items per page with API max 50.
+    $n = $page_size < self::MAX_NUM ? $page_size : self::MAX_NUM;
+
+    for ($i = 0; $i < $page_size; $i += self::MAX_NUM) {
+      $offset = $page * $page_size + $i;
+
+      if (!$response = $this->getResults($n, $offset)) {
+        break;
+      }
+
+      if (isset($response['webPages']['value'])) {
+        $results['count'] = $response['webPages']['totalEstimatedMatches'];
+        $results['items'] = $response['webPages']['value'];
+      }
+      else {
+        break;
+      }
+    }
+
+    return $results;
+  }
+
+  /**
+   * Get query result.
+   *
+   * @param int $n
+   *   Number of items.
+   * @param int $offset
+   *   Offset of items (0-indexed).
+   *
+   * @return object|null
+   *   Decoded response from Bing, or empty array on error.
+   */
+  protected function getResults($n = 1, $offset = 0) {
+    $params = [
+      'offset' => $offset,
+      'count' => $n,
+    ];
+
+    // Grab data regarding conditions placed on the query.
+    $query = $this->view->build_info['query'];
+
+    // TODO find a better way.
+    $keyword = $query['keys'][0];
+
+    return $this->bingCustomSearch->searchResults($keyword, $params);
+  }
 
   /**
    * Adds a simple condition to the query. Collect data on the configured filter
