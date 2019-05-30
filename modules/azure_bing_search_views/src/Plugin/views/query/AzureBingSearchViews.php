@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\azure_bing_search_views\Plugin\views\query;
 
 use Drupal\azure_bing_search\Service\BingCustomSearch;
@@ -38,7 +39,6 @@ class AzureBingSearchViews extends QueryPluginBase {
    * Max number of items (`count`) via API.
    */
   const MAX_NUM = 50;
-
 
   /**
    * AzureBingSearchViews constructor.
@@ -80,7 +80,6 @@ class AzureBingSearchViews extends QueryPluginBase {
    */
   public function build(ViewExecutable $view) {
     // Mostly modeled off of \Drupal\views\Plugin\views\query\Sql::build()
-
     // Store the view in the object to be able to use it later.
     $this->view = $view;
 
@@ -289,17 +288,17 @@ class AzureBingSearchViews extends QueryPluginBase {
     ];
 
     // See https://docs.microsoft.com/en-us/rest/api/cognitiveservices-bingsearch/bing-custom-search-api-v7-reference#query-parameters
-//    $form['safeSearch'] = [
-//      '#title' => $this->t('Safe Search'),
-//      '#type' => 'select',
-//      '#options' => [
-//        'Off' => t('Off'),
-//        'Moderate' => t('Moderate'),
-//        'Strict' => t('Strict'),
-//      ],
-//      '#description' => $this->t('A filter used to filter webpages for adult content.'),
-//      '#default_value' => $this->options['safeSearch'],
-//    ];
+    //    $form['safeSearch'] = [
+    //      '#title' => $this->t('Safe Search'),
+    //      '#type' => 'select',
+    //      '#options' => [
+    //        'Off' => t('Off'),
+    //        'Moderate' => t('Moderate'),
+    //        'Strict' => t('Strict'),
+    //      ],
+    //      '#description' => $this->t('A filter used to filter webpages for adult content.'),
+    //      '#default_value' => $this->options['safeSearch'],
+    //    ];.
   }
 
   /**
@@ -354,7 +353,7 @@ class AzureBingSearchViews extends QueryPluginBase {
    *
    * @see \Drupal\views\Plugin\views\query\Sql::addField()
    */
-  public function addField($table, $field, $alias = '', $params = array()) {
+  public function addField($table, $field, $alias = '', $params = []) {
     return $field;
   }
 
