@@ -286,19 +286,6 @@ class AzureBingSearchViews extends QueryPluginBase {
       '#description' => $this->t('A filter used to filter webpages for adult content.'),
       '#default_value' => $this->options['safeSearch'],
     ];
-
-    // See https://docs.microsoft.com/en-us/rest/api/cognitiveservices-bingsearch/bing-custom-search-api-v7-reference#query-parameters
-    //    $form['safeSearch'] = [
-    //      '#title' => $this->t('Safe Search'),
-    //      '#type' => 'select',
-    //      '#options' => [
-    //        'Off' => t('Off'),
-    //        'Moderate' => t('Moderate'),
-    //        'Strict' => t('Strict'),
-    //      ],
-    //      '#description' => $this->t('A filter used to filter webpages for adult content.'),
-    //      '#default_value' => $this->options['safeSearch'],
-    //    ];.
   }
 
   /**
@@ -337,7 +324,7 @@ class AzureBingSearchViews extends QueryPluginBase {
    * backend.
    *
    * This replicates the interface of Views' default SQL backend to simplify
-   * the Views integration of the Fitbit API.
+   * the Views integration.
    *
    * @param string $table
    *   NULL in most cases, we could probably remove this altogether.
