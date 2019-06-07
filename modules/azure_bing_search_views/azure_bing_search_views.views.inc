@@ -26,8 +26,8 @@ function azure_bing_search_views_views_data() {
     'title' => t('Webpage Name'),
     'help' => t('Use this name along with url to create a hyperlink that when clicked takes the user to the webpage.'),
     'field' => [
-      // See /core/modules/views/src/Plugin/views/field.
-      'id' => 'standard',
+      // See Drupal\azure_bing_search_views\Plugin\views\field\AzureSearchResultTitle.
+      'id' => 'azure_search_result_title',
     ],
   ];
 
