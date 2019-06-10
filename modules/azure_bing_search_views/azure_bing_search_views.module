@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Contains context_metadata.module.
+ */
+
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements hook_theme().
+ *
+ * {@inheritDoc}
+ */
+function azure_bing_search_views_theme($existing, $type, $theme, $path) {
+  return [
+    'azure_bing_search_views_view_list' => [
+      'variables' => [
+        'view' => NULL,
+        'rows' => NULL,
+      ],
+      'path' => drupal_get_path('module', 'demo') . '/templates',
+    ],
+    'azure_bing_search_views_view_title' => [
+      'variables' => [
+        'title' => NULL,
+      ],
+    ],
+    'azure_bing_search_views_view_snippet' => [
+      'variables' => [
+        'snippet' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for views azure_bing_search_views_view_list template.
+ *
+ * Template: azure-bing-search-views-view-list.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - view: The view object.
+ *   - rows: An array of row items. Each row is an array of content.
+ */
+function template_preprocess_azure_bing_search_views_view_list(array &$variables) {
+  $handler = $variables['view']->style_plugin;
+
+  // Fetch classes from handler options.
+  $variables['list']['attributes'] = new Attribute();
+  if ($handler->options['class']) {
+    $class = explode(' ', $handler->options['class']);
+    $class = array_map('\Drupal\Component\Utility\Html::cleanCssIdentifier', $class);
+    $variables['list']['attributes']->addClass($class);
+  }
+
+  // Fetch wrapper classes from handler options.
+  if ($handler->options['wrapper_class']) {
+    $wrapper_class = explode(' ', $handler->options['wrapper_class']);
+    $variables['attributes']['class'] = array_map('\Drupal\Component\Utility\Html::cleanCssIdentifier', $wrapper_class);
+  }
+
+  $variables['list']['type'] = $handler->options['type'];
+
+  template_preprocess_views_view_unformatted($variables);
+}

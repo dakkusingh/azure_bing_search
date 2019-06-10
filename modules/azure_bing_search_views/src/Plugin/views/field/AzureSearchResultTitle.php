@@ -69,7 +69,10 @@ class AzureSearchResultTitle extends FieldPluginBase {
    */
   public function render(ResultRow $values) {
     $value = $this->getValue($values);
-    return $this->renderLink($this->sanitizeValue($value), $values);
+    return [
+      '#theme' => 'azure_bing_search_views_view_title',
+      '#title' => $this->renderLink($this->sanitizeValue($value), $values),
+    ];
   }
 
 }

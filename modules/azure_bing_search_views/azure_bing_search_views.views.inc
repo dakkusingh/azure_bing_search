@@ -46,8 +46,8 @@ function azure_bing_search_views_views_data() {
     'title' => t('Snippet'),
     'help' => t('A snippet of text from the webpage that describes its contents.'),
     'field' => [
-      // See /core/modules/views/src/Plugin/views/field.
-      'id' => 'standard',
+      // See Drupal\azure_bing_search_views\Plugin\views\field\AzureSearchResultSnippet.
+      'id' => 'azure_search_result_snippet',
     ],
   ];
 

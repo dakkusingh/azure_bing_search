@@ -1,0 +1,22 @@
+{#
+/**
+* @file
+* Theme implementation for a view template to display azure search results title.
+*
+* Available variables:
+* - title: Web page title
+*
+* @see template_preprocess_azure_bing_search_views_view_title()
+*
+* @ingroup themeable
+*/
+#}
+{% if snippet %}
+  <div class="search-result__snippet-info">
+    <p class="search-result__snippet">
+      {{ snippet }}
+    </p>
+  </div>
+{% endif %}
+
+
