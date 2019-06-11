@@ -19,7 +19,6 @@ function azure_bing_search_views_theme($existing, $type, $theme, $path) {
         'view' => NULL,
         'rows' => NULL,
       ],
-      'path' => drupal_get_path('module', 'demo') . '/templates',
     ],
     'azure_bing_search_views_view_title' => [
       'variables' => [
