@@ -289,9 +289,9 @@ class AzureBingSearchViews extends QueryPluginBase {
       '#title' => $this->t('Safe Search'),
       '#type' => 'select',
       '#options' => [
-        'Off' => t('Off'),
-        'Moderate' => t('Moderate'),
-        'Strict' => t('Strict'),
+        'Off' => $this->t('Off'),
+        'Moderate' => $this->t('Moderate'),
+        'Strict' => $this->t('Strict'),
       ],
       '#description' => $this->t('A filter used to filter webpages for adult content.'),
       '#default_value' => $this->options['safeSearch'],
