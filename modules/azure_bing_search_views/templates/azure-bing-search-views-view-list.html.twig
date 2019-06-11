@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Theme implementation for a view template to display azure search results list of rows.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the container.
+ * - rows: A list of rows for this list.
+ *   - attributes: The row's HTML attributes.
+ *   - content: The row's contents.
+ * - title: The title of this group of rows. May be empty.
+ * - list:
+ *   - type: Starting tag will be either a ul or ol.
+ *   - attributes: HTML attributes for the list element.
+ *
+ * @see template_preprocess_azure_bing_search_views_view_list()
+ *
+ * @ingroup themeable
+ */
+#}
+{% set list_classes = [
+  'search-results'
+] %}
+
+{% if attributes -%}
+<div{{ attributes }}>
+  {% endif %}
+  {% if title %}
+    <h3>{{ title }}</h3>
+  {% endif %}
+
+  <{{ list.type }}{{ list.attributes.addClass(list_classes) }}>
+
+  {% for row in rows %}
+    <li{{ row.attributes }}>
+      <div class="result-content-wrapper">
+      {{- row.content -}}
+      </div>
+    </li>
+  {% endfor %}
+
+</{{ list.type }}>
+
+{% if attributes -%}
+  </div>
+{% endif %}

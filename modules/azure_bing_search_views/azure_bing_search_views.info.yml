@@ -1,0 +1,8 @@
+name: 'Azure Bing Search Views'
+description: 'Integrates Azure Bing Search with Drupal Views'
+type: module
+core: 8.x
+package: Azure Cognitive Services
+dependencies:
+  - azure_bing_search:azure_bing_search
+  - drupal:views
