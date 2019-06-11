@@ -158,6 +158,9 @@ class AzureBingSearchViews extends QueryPluginBase {
    * This method can assume that $this->isSearchExecutable() has already been
    * checked and returned TRUE.
    *
+   * @param int $page
+   *   Page Number.
+   *
    * @return array|null
    *   Results from search query execute() method, or NULL if the search
    *   failed.
