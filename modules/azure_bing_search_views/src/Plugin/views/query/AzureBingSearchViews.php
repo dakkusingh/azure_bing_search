@@ -222,23 +222,30 @@ class AzureBingSearchViews extends QueryPluginBase {
    * Collect data on the configured filter criteria so that we can
    * appropriately apply it in the query() and execute() methods.
    *
-   * @param $group
-   *   The WHERE group to add these to; groups are used to create AND/OR
+   * @param int $group
+   *   The condition group to add these to; groups are used to create AND/OR
    *   sections. Groups cannot be nested. Use 0 as the default group.
    *   If the group does not yet exist it will be created as an AND group.
-   * @param $field
+   * @param string|\Drupal\Core\Database\Query\ConditionInterface|\Drupal\search_api\Query\ConditionGroupInterface $field
    *   The name of the field to check.
-   * @param $value
-   *   The value to test the field against. In most cases, this is a scalar.
-   *   For more complex options, it is an array.
-   *   The meaning of each element in the array is dependent on the $operator.
-   * @param $operator
-   *   The comparison operator, such as =, <, or >=. It also accepts more
-   *   complex options such as IN, LIKE, LIKE BINARY, or BETWEEN. Defaults to =.
-   *   If $field is a string you have to use 'formula' here.
+   * @param mixed $value
+   *   (optional) The value the field should have (or be related to by the
+   *   operator). Or NULL if an object is passed as $field.
+   * @param string|null $operator
+   *   (optional) The operator to use for checking the constraint. The following
+   *   operators are supported for primitive types: "=", "<>", "<", "<=", ">=",
+   *   ">". They have the same semantics as the corresponding SQL operators.
+   *   If $field is a fulltext field, $operator can only be "=" or "<>", which
+   *   are in this case interpreted as "contains" or "doesn't contain",
+   *   respectively.
+   *   If $value is NULL, $operator also can only be "=" or "<>", meaning the
+   *   field must have no or some value, respectively.
+   *   To stay compatible with Views, "!=" is supported as an alias for "<>".
+   *   If an object is passed as $field, $operator should be NULL.
    *
-   * @see \Drupal\Core\Database\Query\ConditionInterface::condition()
-   * @see \Drupal\Core\Database\Query\Condition
+   * @see \Drupal\views\Plugin\views\query\Sql::addWhere()
+   * @see \Drupal\search_api\Plugin\views\query\SearchApiQuery::filter()
+   * @see \Drupal\search_api\Plugin\views\query\SearchApiQuery::condition()
    */
   public function addWhere($group, $field, $value = NULL, $operator = NULL) {
     // Ensure all variants of 0 are actually 0. Thus '', 0 and NULL are all
