@@ -10,8 +10,10 @@ use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * AzureBingSearchViews views query plugin which wraps calls to the
- * Azure Bing Search API in order to expose the results to views.
+ * AzureBingSearchViews views query plugin.
+ *
+ * This wraps calls to the Azure Bing Search API
+ * in order to expose the results to views.
  *
  * @ViewsQuery(
  *   id = "azure_bing_search_views",
@@ -215,9 +217,10 @@ class AzureBingSearchViews extends QueryPluginBase {
   }
 
   /**
-   * Adds a simple condition to the query. Collect data on the configured filter
-   * criteria so that we can appropriately apply it in the query() and execute()
-   * methods.
+   * Adds a simple condition to the query.
+   *
+   * Collect data on the configured filter criteria so that we can
+   * appropriately apply it in the query() and execute() methods.
    *
    * @param $group
    *   The WHERE group to add these to; groups are used to create AND/OR
@@ -226,9 +229,9 @@ class AzureBingSearchViews extends QueryPluginBase {
    * @param $field
    *   The name of the field to check.
    * @param $value
-   *   The value to test the field against. In most cases, this is a scalar. For more
-   *   complex options, it is an array. The meaning of each element in the array is
-   *   dependent on the $operator.
+   *   The value to test the field against. In most cases, this is a scalar.
+   *   For more complex options, it is an array.
+   *   The meaning of each element in the array is dependent on the $operator.
    * @param $operator
    *   The comparison operator, such as =, <, or >=. It also accepts more
    *   complex options such as IN, LIKE, LIKE BINARY, or BETWEEN. Defaults to =.
@@ -289,6 +292,8 @@ class AzureBingSearchViews extends QueryPluginBase {
   }
 
   /**
+   * Info.
+   *
    * The following methods replicate the interface of Views' default SQL query
    * plugin backend to simplify the Views integration of the Azure Bing Search
    * API. It's necessary to define these, since many handlers assume they are
@@ -316,12 +321,13 @@ class AzureBingSearchViews extends QueryPluginBase {
   }
 
   /**
-   * Adds a field to the table. In our case, the Azure Bing Search API has no
-   * notion of limiting the fields that come back, so tracking a list
-   * of fields to fetch is irrellevant for us. Hence this function body is more
-   * or less empty and it serves only to satisfy handlers that may assume an
-   * addField method is present b/c they were written against Views' default SQL
-   * backend.
+   * Adds a field to the table.
+   *
+   * In our case, the Azure Bing Search API has no notion of limiting the
+   * fields that come back, so tracking a list of fields to fetch is
+   * irrelevant for us. Hence this function body is more or less empty and
+   * it serves only to satisfy handlers that may assume an addField method
+   * is present b/c they were written against Views' default SQL backend.
    *
    * This replicates the interface of Views' default SQL backend to simplify
    * the Views integration.
@@ -340,7 +346,7 @@ class AzureBingSearchViews extends QueryPluginBase {
    *
    * @see \Drupal\views\Plugin\views\query\Sql::addField()
    */
-  public function addField($table, $field, $alias = '', $params = []) {
+  public function addField($table, $field, $alias = '', array $params = []) {
     return $field;
   }
 
