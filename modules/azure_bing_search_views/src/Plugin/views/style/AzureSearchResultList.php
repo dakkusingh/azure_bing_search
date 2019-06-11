@@ -12,7 +12,7 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
  *
  * @ViewsStyle(
  *   id = "azure_search_result_list",
- *   title = @Translation("Azure Search Result Listing"),
+ *   title = @Translation("Bing Search Result"),
  *   help = @Translation("Displays search result in HTML List"),
  *   theme = "azure_bing_search_views_view_list",
  *   display_types = {"normal"}

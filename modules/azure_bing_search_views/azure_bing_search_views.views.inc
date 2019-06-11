@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * Bing Search Views Support.
  */
 
 /**

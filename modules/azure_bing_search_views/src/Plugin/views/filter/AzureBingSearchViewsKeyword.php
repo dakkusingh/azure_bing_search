@@ -22,8 +22,9 @@ class AzureBingSearchViewsKeyword extends FilterPluginBase {
   protected $alwaysMultiple = FALSE;
 
   /**
-   * @var bool
    * Disable the possibility to use operators.
+   *
+   * @var bool
    */
   public $no_operator = FALSE;
 
