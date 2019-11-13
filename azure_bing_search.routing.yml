@@ -4,6 +4,6 @@ azure_bing_search.settings:
     _form: '\Drupal\azure_bing_search\Form\SettingsForm'
     _title: 'Azure Bing Search'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'administer search'
   options:
     _admin_route: TRUE
